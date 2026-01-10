@@ -60,4 +60,17 @@ public class Booking {
         this.numOfChildren = numOfChildren;
         calculateTotalNumberOfGuest();
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "id=" + id +
+                ", checkInDate=" + checkInDate +
+                ", checkOutDate=" + checkOutDate +
+                ", numOfAdults=" + numOfAdults +
+                ", numOfChildren=" + numOfChildren +
+                ", totalNumOfGuest=" + totalNumOfGuest +
+                ", bookingConfirmationCode='" + bookingConfirmationCode + '\'' +
+                '}';
+    }
 }
