@@ -48,6 +48,12 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+		<!-- Spring Boot Validation (ADD THIS) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
 		<!-- MySQL Connector -->
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -99,7 +105,7 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
 			<version>1.12.797</version>
-			<scope>provided</scope> <!-- Change to provided if not always needed -->
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Testing -->

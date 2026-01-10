@@ -1,4 +1,4 @@
-package com.example.hotelmanagementsystem.entity;
+package com.example.Hotel_Management_System.entity;
 
 
 
@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,8 +28,13 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(unique = true)
-    private String email;          // User's email address (used as username)
-    private String fullName;       // User's full name
+    @NotBlank(message = "Email is required")
+    private String email;       // User's email address (used as username)
+
+    @NotBlank(message = "Name is required")
+    private String name;       // User's full name
+
+    @NotBlank(message = "Phone Number is required")
     private String phoneNumber;    // User's contact phone number
     private String password;       // Encrypted password for authentication
     private String role;           // User role (e.g., ADMIN, USER, STAFF)
