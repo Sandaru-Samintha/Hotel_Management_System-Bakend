@@ -1,6 +1,8 @@
-package com.example.hotel.management.system.entity;
+package com.example.hotelmanagementsystem.entity;
 
 
+
+import com.example.Hotel_Management_System.entity.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
