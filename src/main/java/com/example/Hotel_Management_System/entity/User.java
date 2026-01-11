@@ -36,8 +36,13 @@ public class User implements UserDetails {
 
     @NotBlank(message = "Phone Number is required")
     private String phoneNumber;    // User's contact phone number
+
+    @NotBlank(message = "Password Number is required")
     private String password;       // Encrypted password for authentication
+
     private String role;           // User role (e.g., ADMIN, USER, STAFF)
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Booking> bookings = new ArrayList<>();
 
     // ========== UserDetails Interface Implementation ==========
@@ -96,3 +101,4 @@ public class User implements UserDetails {
         return true;
     }
 }
+
