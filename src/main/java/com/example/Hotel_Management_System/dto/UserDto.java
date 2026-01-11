@@ -22,6 +22,6 @@ public class UserDto {
     private String phoneNumber;
     private String password;
     private String role;
-    private List<Booking> bookings;
+    private List<BookingDto> bookings;
 
 }
