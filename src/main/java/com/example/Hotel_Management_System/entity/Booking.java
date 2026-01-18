@@ -38,11 +38,11 @@ public class Booking {
     private String bookingConfirmationCode;
 
 
-    @ManyToMany(fetch = FetchType.EAGER) //Related entity (User) is loaded immediately when you load a Booking so we use FetchType.EAGER (Immediate Loading)
+    @ManyToOne(fetch = FetchType.EAGER) //Related entity (User) is loaded immediately when you load a Booking .So we use FetchType.EAGER (Immediate Loading)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY) //Related entity (Room) is NOT loaded immediately ,FetchType.LAZY (On-Demand Loading)
+    @ManyToOne(fetch = FetchType.LAZY) //Related entity (Room) is NOT loaded immediately ,FetchType.LAZY (On-Demand Loading)
     @JoinColumn(name = "room_id")
     private Room room;
 
