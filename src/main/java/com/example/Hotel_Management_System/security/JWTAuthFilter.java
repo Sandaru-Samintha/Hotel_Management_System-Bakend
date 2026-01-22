@@ -64,8 +64,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         // Check:
         // 1. Username exists in token
         // 2. User is not already authenticated
-        if (userEmail != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             // Load user details from database or cache
             UserDetails userDetails =
@@ -75,8 +74,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             if (jwtUtils.isValidToken(jwtToken, userDetails)) {
 
                 // Create an empty security context
-                SecurityContext securityContext =
-                        SecurityContextHolder.createEmptyContext();
+                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 
                 // Create authentication token with user authorities
                 UsernamePasswordAuthenticationToken token =
