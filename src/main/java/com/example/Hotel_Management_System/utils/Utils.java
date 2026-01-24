@@ -1,7 +1,9 @@
 package com.example.Hotel_Management_System.utils;
 
+import com.example.Hotel_Management_System.dto.BookingDto;
 import com.example.Hotel_Management_System.dto.RoomDto;
 import com.example.Hotel_Management_System.dto.UserDto;
+import com.example.Hotel_Management_System.entity.Booking;
 import com.example.Hotel_Management_System.entity.Room;
 import com.example.Hotel_Management_System.entity.User;
 
@@ -15,7 +17,7 @@ public class Utils {
     private static final SecureRandom secureRandom = new SecureRandom();
 
 
-    public static String generateRandomAlphamnumeric(int length){
+    public static String generateRandomAlphanumeric(int length){
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0;i<length ;i++){
             int randomIndex = secureRandom.nextInt(ALPHANUMERIC_STRING.length());
@@ -48,7 +50,19 @@ public class Utils {
         return roomDto;
     }
 
+    public static BookingDto mapBookingEntityToBookingDTO(Booking booking){
+        BookingDto bookingDto = new BookingDto();
 
+        bookingDto.setId(bookingDto.getId());
+        bookingDto.setCheckInDate(bookingDto.getCheckInDate());
+        bookingDto.setCheckOutDate(bookingDto.getCheckOutDate());
+        bookingDto.setNumOfAdults(bookingDto.getNumOfAdults());
+        bookingDto.setNumOfChildren(bookingDto.getNumOfChildren());
+        bookingDto.setTotalNumOfGuest(bookingDto.getTotalNumOfGuest());
+        bookingDto.setBookingConfirmationCode(bookingDto.getBookingConfirmationCode());
+        return bookingDto;
+
+    }
 
     public static RoomDto mapRoomEntityToRoomDTOPlusBookings(Room room){
         RoomDto roomDto = new RoomDto();
@@ -59,7 +73,7 @@ public class Utils {
         roomDto.setRoomPhotoUrl(room.getRoomPhotoUrl());
 
         if(room.getBookings() != null){
-            roomDto.setBookings(room.getBookings().stream().map(Utils::mapBookingsEntityToBookingsDRO).collect(Collectors.toList()));
+            roomDto.setBookings(room.getBookings().stream().map(Utils::mapBookingEntityToBookingDTO).collect(Collectors.toList()));
         }
         return roomDto;
     }
@@ -74,9 +88,36 @@ public class Utils {
         userDto.setRole(user.getRole());
 
         if(!user.getBookings().isEmpty()){
-            userDto.setBookings(user.getBookings().stream().map(booking -> mapBookingEntityToBookingDTOPlusBookedRoom(booking,false)).collect(Collectors.toList()));
+            userDto.setBookings(user.getBookings().stream().map(booking -> mapBookingEntityToBookingDTOPlusBookedRooms(booking,false)).collect(Collectors.toList()));
         }
         return userDto;
+    }
+
+    public static BookingDto mapBookingEntityToBookingDTOPlusBookedRooms(Booking booking,boolean mapUser){
+        BookingDto bookingDto = new BookingDto();
+
+        bookingDto.setId(bookingDto.getId());
+        bookingDto.setCheckInDate(bookingDto.getCheckInDate());
+        bookingDto.setCheckOutDate(bookingDto.getCheckOutDate());
+        bookingDto.setNumOfAdults(bookingDto.getNumOfAdults());
+        bookingDto.setNumOfChildren(bookingDto.getNumOfChildren());
+        bookingDto.setTotalNumOfGuest(bookingDto.getTotalNumOfGuest());
+        bookingDto.setBookingConfirmationCode(bookingDto.getBookingConfirmationCode());
+
+        if(mapUser){
+           bookingDto.setUser(Utils.mapUserEntityToUserDTO(booking.getUser()));
+        }
+        if(booking.getRoom() != null){
+            RoomDto roomDto = new RoomDto();
+
+            roomDto.setId(booking.getRoom().getId());
+            roomDto.setRoomType(booking.getRoom().getRoomType());
+            roomDto.setRoomPrice(booking.getRoom().getRoomPrice());
+            roomDto.setRoomPhotoUrl(booking.getRoom().getRoomPhotoUrl());
+            roomDto.setRoomDescription(booking.getRoom().getRoomDescription());
+            bookingDto.setRoom(roomDto);
+        }
+        return bookingDto;
     }
 
 }
