@@ -1,6 +1,8 @@
 package com.example.Hotel_Management_System.utils;
 
+import com.example.Hotel_Management_System.dto.RoomDto;
 import com.example.Hotel_Management_System.dto.UserDto;
+import com.example.Hotel_Management_System.entity.Room;
 import com.example.Hotel_Management_System.entity.User;
 
 import java.security.SecureRandom;
@@ -35,6 +37,33 @@ public class Utils {
         return userDto;
     }
 
+    public static RoomDto mapRoomEntityToRoomDTO(Room room){
+        RoomDto roomDto = new RoomDto();
+
+        roomDto.setId(room.getId());
+        roomDto.setRoomType(room.getRoomType());
+        roomDto.setRoomPrice(room.getRoomPrice());
+        roomDto.setRoomPhotoUrl(room.getRoomPhotoUrl());
+
+        return roomDto;
+    }
+
+
+
+    public static RoomDto mapRoomEntityToRoomDTOPlusBookings(Room room){
+        RoomDto roomDto = new RoomDto();
+
+        roomDto.setId(room.getId());
+        roomDto.setRoomType(room.getRoomType());
+        roomDto.setRoomPrice(room.getRoomPrice());
+        roomDto.setRoomPhotoUrl(room.getRoomPhotoUrl());
+
+        if(room.getBookings() != null){
+            roomDto.setBookings(room.getBookings().stream().map(Utils::mapBookingsEntityToBookingsDRO).collect(Collectors.toList()));
+        }
+        return roomDto;
+    }
+
     public static UserDto mapUserEntityToUserDTOPlusUserBookingsAndRoom(User user){
         UserDto userDto = new UserDto();
 
@@ -49,4 +78,5 @@ public class Utils {
         }
         return userDto;
     }
+
 }
