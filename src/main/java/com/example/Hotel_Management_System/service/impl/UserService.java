@@ -12,6 +12,7 @@ import com.example.Hotel_Management_System.utils.Utils;
 import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserService implements IUserService {
@@ -61,7 +62,29 @@ public class UserService implements IUserService {
 
     @Override
     public Response login(LoginRequest loginRequest) {
-        return null;
+        Response response = new Response();
+
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
+            var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(()-> new OurException("User Not Found"));
+
+            var token = jwtUtils.generateToken(user);
+            response.setStatusCode(200);
+            response.setToken(token);
+            response.setRole(user.getRole());
+            response.setExpirationTime("7 Days");
+            response.setMessage("Successful");
+
+
+        }catch (OurException e){
+            response.setStatusCode(400);
+            response.setMessage(e.getMessage());
+        } catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error Occurred During User Login" + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
