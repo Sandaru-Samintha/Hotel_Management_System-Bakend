@@ -6,7 +6,7 @@ import com.example.Hotel_Management_System.entity.User;
 
 public interface IUserService {
 
-    Response register(User loginRequest);
+    Response register(User user);
     Response login(LoginRequest loginRequest);
 
     Response getAllUsers();
