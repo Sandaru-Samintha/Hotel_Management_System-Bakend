@@ -83,7 +83,7 @@ public class UserService implements IUserService {
             response.setMessage(e.getMessage());
         } catch (Exception e){
             response.setStatusCode(500);
-            response.setMessage("Error Occurred During User Login" + e.getMessage());
+            response.setMessage("Error occurred during user login" + e.getMessage());
         }
 
         return response;
@@ -125,19 +125,51 @@ public class UserService implements IUserService {
             response.setMessage(e.getMessage());
         }catch (Exception e){
             response.setStatusCode(500);
-            response.setMessage("Error getting all Users" + e.getMessage());
+            response.setMessage("Error getting all users booking history" + e.getMessage());
         }
         return response;
     }
 
     @Override
     public Response deleteUser(String userId) {
-        return null;
+
+        Response response = new Response();
+
+        try{
+            userRepository.findById(Long.valueOf(userId)).orElseThrow(()-> new OurException("User Not Found"));
+            userRepository.deleteById(Long.valueOf(userId));
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+
+        }catch (OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        }catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error  deleting user " + e.getMessage());
+        }
+        return response;
     }
 
     @Override
     public Response getUserById(String userId) {
-        return null;
+        Response response = new Response();
+
+        try{
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(()-> new OurException("User Not Found"));
+            UserDto userDto = Utils.mapUserEntityToUserDTO(user);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setUser(userDto);
+
+        }catch (OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        }catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error getting user " + e.getMessage());
+        }
+        return response;
     }
 
     @Override
