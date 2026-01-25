@@ -15,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 public class UserService implements IUserService {
 
    @Autowired
@@ -77,7 +79,7 @@ public class UserService implements IUserService {
 
 
         }catch (OurException e){
-            response.setStatusCode(400);
+            response.setStatusCode(404);
             response.setMessage(e.getMessage());
         } catch (Exception e){
             response.setStatusCode(500);
@@ -89,7 +91,21 @@ public class UserService implements IUserService {
 
     @Override
     public Response getAllUsers() {
-        return null;
+
+        Response response = new Response();
+        try{
+            List <User> userList = userRepository.findAll();
+            List <UserDto> userDtoList = Utils.mapUserListEntityToUserListDTO(userList);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setUserList(userDtoList);
+
+        } catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error getting all users" + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
