@@ -8,6 +8,7 @@ import com.example.Hotel_Management_System.entity.Room;
 import com.example.Hotel_Management_System.entity.User;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -46,6 +47,7 @@ public class Utils {
         roomDto.setRoomType(room.getRoomType());
         roomDto.setRoomPrice(room.getRoomPrice());
         roomDto.setRoomPhotoUrl(room.getRoomPhotoUrl());
+        roomDto.setRoomDescription(room.getRoomDescription());
 
         return roomDto;
     }
@@ -71,6 +73,7 @@ public class Utils {
         roomDto.setRoomType(room.getRoomType());
         roomDto.setRoomPrice(room.getRoomPrice());
         roomDto.setRoomPhotoUrl(room.getRoomPhotoUrl());
+        roomDto.setRoomDescription(room.getRoomDescription());
 
         if(room.getBookings() != null){
             roomDto.setBookings(room.getBookings().stream().map(Utils::mapBookingEntityToBookingDTO).collect(Collectors.toList()));
@@ -118,6 +121,18 @@ public class Utils {
             bookingDto.setRoom(roomDto);
         }
         return bookingDto;
+    }
+
+    public static List<UserDto> mapUserListEntityToUserListDTO(List<User> userList){
+        return userList.stream().map(Utils::mapUserEntityToUserDTO).collect(Collectors.toList());
+    }
+
+    public static List<RoomDto> mapRoomListEntityToRoomListDTO(List<Room> roomList){
+        return roomList.stream().map(Utils::mapRoomEntityToRoomDTO).collect(Collectors.toList());
+    }
+
+    public static List<BookingDto> mapBookingListEntityToBookingListDTO(List<Booking> bookingList){
+        return bookingList.stream().map(Utils::mapBookingEntityToBookingDTO).collect(Collectors.toList());
     }
 
 }
