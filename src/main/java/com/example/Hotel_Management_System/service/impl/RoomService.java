@@ -129,7 +129,7 @@ public class RoomService implements IRoomService {
             response.setMessage(e.getMessage());
         } catch (Exception e){
             response.setStatusCode(500);
-            response.setMessage("Error saving a room " + e.getMessage());
+            response.setMessage("Error updating a room " + e.getMessage());
         }
 
         return response;
@@ -142,7 +142,6 @@ public class RoomService implements IRoomService {
         try{
             Room room = roomRepository.findById(roomId).orElseThrow(()->new OurException("Room Not Found"));
             RoomDto roomDto = Utils.mapRoomEntityToRoomDTOPlusBookings(room);
-            roomRepository.findById(roomId);
             response.setStatusCode(200);
             response.setMessage("Successful");
             response.setRoom(roomDto);
@@ -152,7 +151,7 @@ public class RoomService implements IRoomService {
             response.setMessage(e.getMessage());
         } catch (Exception e){
             response.setStatusCode(500);
-            response.setMessage("Error saving a room " + e.getMessage());
+            response.setMessage("Error getting a room " + e.getMessage());
         }
 
         return response;
@@ -160,7 +159,21 @@ public class RoomService implements IRoomService {
 
     @Override
     public Response getAvailableRoomsByDateAndType(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
-        return null;
+        Response response = new Response();
+
+        try{
+            List<Room> availableRooms =roomRepository.findAvailableRoomsByDateAndTypes(checkInDate,checkOutDate,roomType);
+            List<RoomDto> roomDtoList = Utils.mapRoomListEntityToRoomListDTO(availableRooms);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setRoomList(roomDtoList);
+
+        } catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error getting available  rooms by date and type " + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
