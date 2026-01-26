@@ -103,8 +103,36 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Response updateRoom(Long roomId, String roomType, BigDecimal roomPrice, MultipartFile photo) {
-        return null;
+    public Response updateRoom(Long roomId, String roomType,String description, BigDecimal roomPrice, MultipartFile photo) {
+        Response response = new Response();
+
+        try{
+            String imageUrl = null;
+            if(photo != null && !photo.isEmpty()){
+                imageUrl = awsS3Service.saveImageToS3(photo);
+            }
+            Room room = roomRepository.findById(roomId).orElseThrow(()->new OurException("Room Not Found"));
+            if(roomType != null)room.setRoomType(roomType);
+            if(description != null)room.setRoomDescription(description);
+            if(roomPrice != null)room.setRoomPrice(roomPrice);
+            if(imageUrl != null)room.setRoomPhotoUrl(imageUrl);
+
+            Room updatedRoom = roomRepository.save(room);
+            RoomDto roomDto = Utils.mapRoomEntityToRoomDTO(updatedRoom);
+
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setRoom(roomDto);
+
+        }catch (OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error saving a room " + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
