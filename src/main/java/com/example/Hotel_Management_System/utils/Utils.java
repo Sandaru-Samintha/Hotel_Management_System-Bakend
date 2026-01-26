@@ -25,7 +25,7 @@ public class Utils {
 
     // Generates a random alphanumeric string of given length
     // Commonly used for booking confirmation codes
-    public static String generateRandomAlphanumeric(int length){
+    public static String generateRandomConfirmationCode(int length){
         StringBuilder stringBuilder = new StringBuilder();
 
         // Loop to generate each character of the string
