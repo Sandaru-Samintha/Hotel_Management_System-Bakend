@@ -115,7 +115,7 @@ public class BookingService implements IBookingService {
 
         }catch(Exception e){
             response.setStatusCode(500);
-            response.setMessage("Error find booking by confirmation code : " + e.getMessage());
+            response.setMessage("Error getting all bookings : " + e.getMessage());
         }
 
         return response;
@@ -123,7 +123,25 @@ public class BookingService implements IBookingService {
 
     @Override
     public Response cancelBooking(Long bookingId) {
-        return null;
+        Response response = new Response();
+
+        try {
+            Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new OurException("Booking Does Not Exist"));
+            bookingRepository.deleteById(bookingId);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+
+
+        }catch(OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+
+        }catch(Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error canceling a booking : " + e.getMessage());
+        }
+
+        return response;
     }
 
 
