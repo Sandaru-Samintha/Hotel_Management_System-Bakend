@@ -3,13 +3,13 @@ package com.example.Hotel_Management_System.service.impl;
 import com.example.Hotel_Management_System.dto.Response;
 import com.example.Hotel_Management_System.dto.RoomDto;
 import com.example.Hotel_Management_System.entity.Room;
-import com.example.Hotel_Management_System.exception.OurException;
 import com.example.Hotel_Management_System.repository.BookingRepository;
 import com.example.Hotel_Management_System.repository.RoomRepository;
 import com.example.Hotel_Management_System.service.AwsS3Service;
 import com.example.Hotel_Management_System.service.interfac.IRoomService;
 import com.example.Hotel_Management_System.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,12 +57,27 @@ public class RoomService implements IRoomService {
 
     @Override
     public List<String> getAllRoomTypes() {
-        return null;
+        return roomRepository.findDistinctRoomTypes();
     }
 
     @Override
     public Response getAllRooms() {
-        return null;
+        Response response = new Response();
+
+        try{
+            List<Room> roomList = roomRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
+            List<RoomDto> roomDtoList = Utils.mapRoomListEntityToRoomListDTO(roomList);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setRoomList(roomDtoList);
+
+        }catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error saving a room " + e.getMessage());
+        }
+
+        return response;
+        
     }
 
     @Override
