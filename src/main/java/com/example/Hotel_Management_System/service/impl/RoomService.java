@@ -137,7 +137,25 @@ public class RoomService implements IRoomService {
 
     @Override
     public Response getRoomById(Long roomId) {
-        return null;
+        Response response = new Response();
+
+        try{
+            Room room = roomRepository.findById(roomId).orElseThrow(()->new OurException("Room Not Found"));
+            RoomDto roomDto = Utils.mapRoomEntityToRoomDTOPlusBookings(room);
+            roomRepository.findById(roomId);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setRoom(roomDto);
+
+        }catch (OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error saving a room " + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
