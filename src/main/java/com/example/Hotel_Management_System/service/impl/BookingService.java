@@ -1,5 +1,6 @@
 package com.example.Hotel_Management_System.service.impl;
 
+import com.example.Hotel_Management_System.dto.BookingDto;
 import com.example.Hotel_Management_System.dto.Response;
 import com.example.Hotel_Management_System.entity.Booking;
 import com.example.Hotel_Management_System.entity.Room;
@@ -11,6 +12,7 @@ import com.example.Hotel_Management_System.repository.UserRepository;
 import com.example.Hotel_Management_System.service.interfac.IBookingService;
 import com.example.Hotel_Management_System.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,12 +77,48 @@ public class BookingService implements IBookingService {
 
     @Override
     public Response findBookingByConfirmationCode(String confirmationCode) {
-        return null;
+        Response response = new Response();
+
+        try {
+            Booking booking = bookingRepository.findByBookingConfirmationCode(confirmationCode).orElseThrow(()-> new OurException("Booking Not Found"));
+            BookingDto bookingDto = Utils.mapBookingEntityToBookingDTO(booking);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setBooking(bookingDto);
+
+        }catch(OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+
+        }catch(Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error find booking by confirmation code : " + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
     public Response getAllBookings() {
-        return null;
+        Response response = new Response();
+
+        try {
+            List<Booking> bookingList = bookingRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
+            List<BookingDto> bookingDtoList = Utils.mapBookingListEntityToBookingListDTO(bookingList) ;
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+            response.setBookingList(bookingDtoList);
+
+        }catch(OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+
+        }catch(Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error find booking by confirmation code : " + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
