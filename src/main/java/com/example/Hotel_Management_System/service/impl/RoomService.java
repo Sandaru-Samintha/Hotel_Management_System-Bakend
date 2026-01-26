@@ -3,6 +3,7 @@ package com.example.Hotel_Management_System.service.impl;
 import com.example.Hotel_Management_System.dto.Response;
 import com.example.Hotel_Management_System.dto.RoomDto;
 import com.example.Hotel_Management_System.entity.Room;
+import com.example.Hotel_Management_System.exception.OurException;
 import com.example.Hotel_Management_System.repository.BookingRepository;
 import com.example.Hotel_Management_System.repository.RoomRepository;
 import com.example.Hotel_Management_System.service.AwsS3Service;
@@ -82,7 +83,23 @@ public class RoomService implements IRoomService {
 
     @Override
     public Response deleteRoom(Long roomId) {
-        return null;
+        Response response = new Response();
+
+        try{
+            roomRepository.findById(roomId).orElseThrow(()->new OurException("Room Not Found"));
+            roomRepository.deleteById(roomId);
+            response.setStatusCode(200);
+            response.setMessage("Successful");
+
+        }catch (OurException e){
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e){
+            response.setStatusCode(500);
+            response.setMessage("Error saving a room " + e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
