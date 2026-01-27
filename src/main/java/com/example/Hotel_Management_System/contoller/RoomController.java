@@ -26,11 +26,9 @@ public class RoomController {
     private IBookingService bookingService;
 
 
-
-
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> getAvailableRoomsByDateAndType(
+    public ResponseEntity<Response> addNewRoom(
             @RequestParam(value = "photo",required = false)MultipartFile photo ,
             @RequestParam(value = "roomType",required = false)String roomType ,
             @RequestParam(value = "roomPrice",required = false) BigDecimal roomPrice ,
@@ -83,6 +81,18 @@ public class RoomController {
             return  ResponseEntity.status(response.getStatusCode()).body(response);
         }
         Response response = roomService.getAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType);
+        return  ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @PutMapping("/update/{roomId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> updateRoom(@PathVariable Long roomId,
+                                               @RequestParam(value = "photo",required = false)MultipartFile photo ,
+                                               @RequestParam(value = "roomType",required = false)String roomType ,
+                                               @RequestParam(value = "roomPrice",required = false) BigDecimal roomPrice ,
+                                               @RequestParam(value = "roomDescription",required = false)String roomDescription
+    ){
+        Response response = roomService.updateRoom(roomId ,roomType ,roomDescription, roomPrice , photo);
         return  ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
