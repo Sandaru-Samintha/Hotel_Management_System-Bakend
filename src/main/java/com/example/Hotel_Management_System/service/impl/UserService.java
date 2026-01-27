@@ -9,14 +9,15 @@ import com.example.Hotel_Management_System.repository.UserRepository;
 import com.example.Hotel_Management_System.service.interfac.IUserService;
 import com.example.Hotel_Management_System.utils.JWTUtils;
 import com.example.Hotel_Management_System.utils.Utils;
-import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserService implements IUserService {
 
    @Autowired

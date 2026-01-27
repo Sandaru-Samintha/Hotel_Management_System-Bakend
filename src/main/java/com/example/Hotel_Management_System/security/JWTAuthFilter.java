@@ -1,8 +1,8 @@
 package com.example.Hotel_Management_System.security;
 
+import com.example.Hotel_Management_System.service.CustomerUserDetailsService;
 import com.example.Hotel_Management_System.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +34,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     // Loads user details from cache or database
     @Autowired
-    private CachingUserDetailsService cachingUserDetailsService;
+    private CustomerUserDetailsService customerUserDetailsService;
 
     /**
      * This method is executed for every incoming HTTP request.
@@ -68,7 +68,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
             // Load user details from database or cache
             UserDetails userDetails =
-                    cachingUserDetailsService.loadUserByUsername(userEmail);
+                    customerUserDetailsService.loadUserByUsername(userEmail);
 
             // Validate JWT token against user details
             if (jwtUtils.isValidToken(jwtToken, userDetails)) {
