@@ -33,4 +33,10 @@ public class BookingController {
         Response response = bookingService.getAllBookings();
         return  ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    @GetMapping("/get-by-confirmation-code/{confirmationCode}")
+    public ResponseEntity<Response> getBookingByConfirmationCode(@PathVariable String confirmationCode){
+        Response response = bookingService.findBookingByConfirmationCode(confirmationCode);
+        return  ResponseEntity.status(response.getStatusCode()).body(response);
+    }
 }
