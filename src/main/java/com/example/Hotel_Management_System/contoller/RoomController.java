@@ -6,6 +6,7 @@ import com.example.Hotel_Management_System.service.interfac.IBookingService;
 import com.example.Hotel_Management_System.service.interfac.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,23 +27,26 @@ public class RoomController {
     private IBookingService bookingService;
 
 
-    @PostMapping("/add")
+    @PostMapping(
+            value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> addNewRoom(
-            @RequestParam(value = "photo",required = false)MultipartFile photo ,
-            @RequestParam(value = "roomType",required = false)String roomType ,
-            @RequestParam(value = "roomPrice",required = false) BigDecimal roomPrice ,
-            @RequestParam(value = "roomDescription",required = false)String roomDescription
-        ){
-        if(photo == null || photo.isEmpty() || roomType == null || roomType.isBlank() || roomPrice == null || roomType.isBlank()){
+            @RequestParam("photo") MultipartFile photo,
+            @RequestParam("roomType") String roomType,
+            @RequestParam("roomPrice") BigDecimal roomPrice,
+            @RequestParam(value = "roomDescription", required = false) String roomDescription
+    ) {
+
+        if(photo == null || photo.isEmpty() || roomType == null || roomType.isBlank() || roomPrice == null ){
             Response response = new Response();
             response.setStatusCode(400);
-            response.setMessage("Please provide values for all fields(photo ,roomType , roomPrice");
+            response.setMessage("Please provide values for all fields(photo ,roomType , roomPrice)");
             return  ResponseEntity.status(response.getStatusCode()).body(response);
         }
-        Response response = roomService.addNewRoom(photo, roomType, roomPrice, roomDescription);
+        Response response = roomService.addNewRoom(photo,roomType,roomPrice,roomDescription);
         return  ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
 
 
     @GetMapping("/all")
